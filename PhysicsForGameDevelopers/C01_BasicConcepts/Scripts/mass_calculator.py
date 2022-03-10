@@ -1,5 +1,4 @@
 import taichi as ti
-from random import random
 
 ti.init(arch=ti.gpu, debug=True)
 

@@ -1,4 +1,5 @@
 - [Explicit v.s. implicit time integrators](#explicit-vs-implicit-time-integrators)
+- [Courant-Friedrichs-Lewy (CFL) condition](#courant-friedrichs-lewy-cfl-condition)
 
 # Explicit v.s. implicit time integrators
 
@@ -21,7 +22,7 @@ Implicit (backward Euler, middle-point, ...):
 - Numerical damping and locking
 
 
-Courant-Friedrichs-Lewy (CFL) condition
+# Courant-Friedrichs-Lewy (CFL) condition
 
 One upper bound of time step size:
 
