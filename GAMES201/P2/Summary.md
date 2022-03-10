@@ -1,3 +1,5 @@
+- [Explicit v.s. implicit time integrators](#explicit-vs-implicit-time-integrators)
+
 # Explicit v.s. implicit time integrators
 
 Explicit (forward Euler, symplectic Euler, RK, ...):
