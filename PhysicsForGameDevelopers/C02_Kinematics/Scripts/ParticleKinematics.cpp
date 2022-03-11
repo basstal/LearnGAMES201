@@ -19,7 +19,7 @@ static float fov = 45.0f, aspectRatio = (float)SCR_WIDTH / SCR_HEIGHT;
 int simulation_count = 0;
 glm::vec3 s, v = glm::vec3(0), a = glm::vec3(0);
 float t = 0.0f, cosThetaX = 0.0f, cosThetaY = 0.0f, cosThetaZ = 0.0f;
-float Lx = 0.0f, Ly = 0.0f, Lz = 0.0f, cosAlpha = 0.0f, b = 0.0f;
+float Lx = 0.0f, Ly = 0.0f, Lz = 0.0f, cosAlpha = 0.0f, b = 0.0f, xe = 0.0f, ze = 0.0f;
 /// initia parameters
 int simulation_steps = 599;
 float alpha = 60.78f, gamma = 8.321f, vm = 8.0f, cannonLength = 2.0f, yStart = 0.0f;
@@ -41,8 +41,7 @@ static float cameraSpeed = 10;
 static bool firstMouse = true;
 static float lastX = 0, lastY = 0;
 static bool bCursorOff = false;
-static bool bPressed;
-static bool bSimulatePaused;
+static bool bPressed, bNextStep, bSimulatePaused;
 const float PI = 3.14159265359f;
 std::vector<float> projectile = std::vector<float>();
 
@@ -97,7 +96,7 @@ void resetSimulation()
 {
     simulation_count = 0;
     t = 0;
-    s = glm::vec3(Lx, (yStart + cannonLength * cosAlpha), Lz);
+    s = glm::vec3(xe, (yStart + cannonLength * cosAlpha), ze);
     projectile.clear();
 }
 
@@ -298,26 +297,37 @@ void draw_imgui(GLFWwindow *window)
     {
         bSimulatePaused = !bSimulatePaused;
     }
+    if (ImGui::Button("Step"))
+    {
+        bNextStep = true;
+    }
 }
 
 void simulate(float delta)
 {
     cosAlpha = cos(glm::radians(alpha));
-    b = cannonLength * cos(PI / 2 - glm::radians(alpha));
+    b = cannonLength * cos(glm::radians(90 - alpha));
     Lx = b * cos(glm::radians(gamma));
     Ly = cannonLength * cosAlpha;
     Lz = b * sin(glm::radians(gamma));
     cosThetaX = Lx / cannonLength;
     cosThetaY = Ly / cannonLength;
     cosThetaZ = Lz / cannonLength;
-    if (simulation_count < simulation_steps && !bSimulatePaused)
+
+    // These are the x and z coordinates of the very end of the cannon barrel
+    // we'll use these as the initial x and z displacements
+    xe = cannonLength * cos(glm::radians(90 - alpha)) * cos(glm::radians(gamma));
+    ze = cannonLength * cos(glm::radians(90 - alpha)) * sin(glm::radians(gamma));
+
+    if ((simulation_count < simulation_steps && !bSimulatePaused) || bNextStep)
     {
+        bNextStep = false;
         simulation_count += 1;
         t += delta;
         s = glm::vec3(
-            Lx + vm * cosThetaX * t,
-            (yStart + cannonLength * cosAlpha) + (vm * cosThetaY) * t - g * (pow(t, 2)) / 2,
-            Lz + vm * cosThetaZ * t);
+            xe + vm * cosThetaX * t,
+            (yStart + cannonLength * cosAlpha) + (vm * cosThetaY) * t - 0.5f * g * t * t,
+            ze + vm * cosThetaZ * t);
         v = glm::vec3(
             vm * cosThetaX,
             (vm * cosThetaY) - g * t,
@@ -354,8 +364,6 @@ void drawProjectile()
     glBindVertexArray(0);
 }
 
-static unsigned int cannonVAO, cannonVBO;
-
 void drawCannon()
 {
     glm::vec3 cannonPos = glm::vec3(Lx / 2, Ly / 2, Lz / 2);
@@ -366,71 +374,7 @@ void drawCannon()
     model = glm::rotate(model, glm::radians(-alpha), glm::vec3(0, 0, 1));
     model = glm::scale(model, scale);
     shaderProgram->setMat4("model", model);
-    if (cannonVAO == 0)
-    {
-        float vertices[] = {
-            // back face
-            -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, // bottom-left
-            1.0f, 1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,   // top-right
-            1.0f, -1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f,  // bottom-right
-            1.0f, 1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f,   // top-right
-            -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, // bottom-left
-            -1.0f, 1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f,  // top-left
-            // front face
-            -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom-left
-            1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f,  // bottom-right
-            1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,   // top-right
-            1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f,   // top-right
-            -1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,  // top-left
-            -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom-left
-            // left face
-            -1.0f, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,   // top-right
-            -1.0f, 1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 1.0f,  // top-left
-            -1.0f, -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom-left
-            -1.0f, -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom-left
-            -1.0f, -1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f,  // bottom-right
-            -1.0f, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f,   // top-right
-            // right face
-            1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,   // top-left
-            1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom-right
-            1.0f, 1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,  // top-right
-            1.0f, -1.0f, -1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom-right
-            1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,   // top-left
-            1.0f, -1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,  // bottom-left
-            // bottom face
-            -1.0f, -1.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f, // top-right
-            1.0f, -1.0f, -1.0f, 0.0f, -1.0f, 0.0f, 1.0f, 1.0f,  // top-left
-            1.0f, -1.0f, 1.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,   // bottom-left
-            1.0f, -1.0f, 1.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,   // bottom-left
-            -1.0f, -1.0f, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f,  // bottom-right
-            -1.0f, -1.0f, -1.0f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f, // top-right
-            // top face
-            -1.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, // top-left
-            1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,   // bottom-right
-            1.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,  // top-right
-            1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,   // bottom-right
-            -1.0f, 1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, // top-left
-            -1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f   // bottom-left
-        };
-        glGenVertexArrays(1, &cannonVAO);
-        // link vertex attributes
-        glBindVertexArray(cannonVAO);
-        glBindVertexArray(cannonVAO);
-        glGenBuffers(1, &cannonVBO);
-        // fill buffer
-        glBindBuffer(GL_ARRAY_BUFFER, cannonVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)0);
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(3 * sizeof(float)));
-        glEnableVertexAttribArray(2);
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void *)(6 * sizeof(float)));
-        glBindVertexArray(0);
-    }
-    glBindVertexArray(cannonVAO);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-    glBindVertexArray(0);
+    renderCube();
 }
 
 void drawScene()

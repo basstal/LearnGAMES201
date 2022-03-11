@@ -1,12 +1,17 @@
 cmake_minimum_required(VERSION 3.10)
 
 set(ROOT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../..")
+
+if (MSVC)
+    set(CMAKE_EXE_LINKER_FLAGS
+        "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:MSVCRT.LIB")
+    set(CMAKE_EXE_LINKER_FLAGS_DEBUG
+        "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT.LIB")
+    set(CMAKE_CXX_FLAGS_RELEASE "/MT")
+    set(CMAKE_CXX_FLAGS_DEBUG "/MDd /DEBUG")
+endif()
+
 get_filename_component(ROOT_PATH ${ROOT_PATH} REALPATH)
-
-set(PROJECT_NAME "ParticleKinematics")
-
-# Project name
-project(${PROJECT_NAME})
 
 # lib source glad
 add_library(glad "${ROOT_PATH}/Plugins/glad/glad.c")
@@ -35,6 +40,11 @@ target_include_directories(lcosphere PUBLIC
     "${ROOT_PATH}/Plugins/others"
     "${ROOT_PATH}/Plugins/")
 
+set(PROJECT_NAME "ParticleKinematics")
+
+# Project name
+project(${PROJECT_NAME})
+
 # project source
 add_executable(${PROJECT_NAME} 
     ParticleKinematics.cpp
@@ -47,19 +57,44 @@ target_link_libraries(${PROJECT_NAME}
     imgui
     lcosphere)
 
+if(MSVC)
+    target_link_libraries(${PROJECT_NAME}
+        "${ROOT_PATH}/Plugins/glfw-3.3.4/lib-vc2019/glfw3_mt.lib")
+endif()
+
 target_include_directories(${PROJECT_NAME} PUBLIC 
     "${ROOT_PATH}/Plugins"
     "${ROOT_PATH}/Plugins/imgui"
     "${ROOT_PATH}/Plugins/glfw-3.3.4/include"
     "${ROOT_PATH}/Scripts/include")
 
+
+
+# Particle Explosion
+set(PROJECT_NAME "ParticleExplosion")
+
+
+# project source
+add_executable(${PROJECT_NAME} 
+    ParticleExplosion.cpp
+    "${ROOT_PATH}/Scripts/Shader.cpp"
+    "${ROOT_PATH}/Scripts/Utils.cpp"
+    "${ROOT_PATH}/Scripts/STBImage.cpp")
+
+target_link_libraries(${PROJECT_NAME} 
+    glad
+    imgui
+    lcosphere)
+    
 if(MSVC)
     target_link_libraries(${PROJECT_NAME}
         "${ROOT_PATH}/Plugins/glfw-3.3.4/lib-vc2019/glfw3_mt.lib")
-    set(CMAKE_EXE_LINKER_FLAGS
-        "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:MSVCRT.LIB")
-    set(CMAKE_EXE_LINKER_FLAGS_DEBUG
-        "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT.LIB")
-    set(CMAKE_CXX_FLAGS_RELEASE "/MT")
-    set(CMAKE_CXX_FLAGS_DEBUG "/MDd /DEBUG")
 endif()
+
+target_include_directories(${PROJECT_NAME} PUBLIC 
+    "${ROOT_PATH}/Plugins"
+    "${ROOT_PATH}/Plugins/imgui"
+    "${ROOT_PATH}/Plugins/glfw-3.3.4/include"
+    "${ROOT_PATH}/Scripts/include")
+
+

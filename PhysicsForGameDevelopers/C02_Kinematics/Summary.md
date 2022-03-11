@@ -23,3 +23,17 @@ $s = \ln{(1 + v_1 k t)} / k$ while $a = -k v^2$
 
 ## 3D Particle Kinematics
 
+[Particle Kinematics Example](./Scripts/ParticleKinematics.cpp)
+
+## Kinematic Particle Explosion
+
+[Particle Explosion Example](./Scripts/ParticleExplosion.cpp)
+
+## About run example
+
+```shell
+cd C02_Kinematics/Scripts/
+cmake .
+cmake --build .
+./Debug/ParticleKinematics.exe
+```
