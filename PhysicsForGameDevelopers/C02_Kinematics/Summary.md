@@ -29,6 +29,24 @@ $s = \ln{(1 + v_1 k t)} / k$ while $a = -k v^2$
 
 [Particle Explosion Example](./Scripts/ParticleExplosion.cpp)
 
+## Angular velocity and Acceleration
+
+displacement ($\Omega$) -> radians (rad)
+
+velocity ($\omega$) -> radians per sec (rad/s)
+
+acceleration ($\alpha$) -> radians per second-squared (rad/$s^2$)
+
+c to denote arc length and r to denote the distance from the axis of rotation to the particle.
+
+$$c = r \space \Omega$$
+
+$$v = r \omega$$
+
+$$a_t = r \alpha$$
+
+$\alpha$ means anguler acceleration, $a_t$ means tangential linear acceleration.
+
 ## About run example
 
 ```shell

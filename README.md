@@ -1,6 +1,7 @@
 - [Learn Game Physics](#learn-game-physics)
   - [Contents](#contents)
     - [PhysicsForGameDevelopers](#physicsforgamedevelopers)
+      - [Progress](#progress)
     - [GAMES201](#games201)
   - [Notes](#notes)
 
@@ -11,6 +12,11 @@
 ### PhysicsForGameDevelopers
 
 - [Chapter1 Basic Concepts](./PhysicsForGameDevelopers/C01_BasicConcepts/Summary.md)
+- [Chapter2 Kinematics](./PhysicsForGameDevelopers/C02_Kinematics/Summary.md)
+
+#### Progress
+
+65 / 553
 
 ### GAMES201
 
