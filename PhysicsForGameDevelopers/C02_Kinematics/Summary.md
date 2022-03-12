@@ -1,3 +1,11 @@
+- [Kinematics](#kinematics)
+  - [Velocity and Acceleration](#velocity-and-acceleration)
+  - [Constant Acceleration](#constant-acceleration)
+  - [Nonconstant Acceleration](#nonconstant-acceleration)
+  - [3D Particle Kinematics](#3d-particle-kinematics)
+  - [Kinematic Particle Explosion](#kinematic-particle-explosion)
+  - [Angular velocity and Acceleration](#angular-velocity-and-acceleration)
+  - [About run example](#about-run-example)
 # Kinematics
 
 ## Velocity and Acceleration
@@ -46,6 +54,14 @@ $$v = r \omega$$
 $$a_t = r \alpha$$
 
 $\alpha$ means anguler acceleration, $a_t$ means tangential linear acceleration.
+
+$$a_n = v^2 / r = r \omega^2$$
+
+$$\bold{v} = \boldsymbol{\omega} \times \bold{r}$$
+
+$$\bold{a_n}=\boldsymbol{\omega} \times (\boldsymbol{\omega} \times \bold{r})$$
+
+$$\bold{a_t} = \boldsymbol{\alpha} \times \bold{r}$$
 
 ## About run example
 

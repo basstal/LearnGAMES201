@@ -13,10 +13,12 @@
 
 - [Chapter1 Basic Concepts](./PhysicsForGameDevelopers/C01_BasicConcepts/Summary.md)
 - [Chapter2 Kinematics](./PhysicsForGameDevelopers/C02_Kinematics/Summary.md)
+- [Chapter3 Force](./PhysicsForGameDevelopers/C03_Force/Summary.md)
+- [Chapter4 Kinetics](./PhysicsForGameDevelopers/C04_Kinetics/Summary.md)
 
 #### Progress
 
-65 / 553
+88 / 553
 
 ### GAMES201
 
