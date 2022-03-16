@@ -1,5 +1,5 @@
 - [Kinetics](#kinetics)
-  - [Particle Kinetics in 2D](#particle-kinetics-in-2d)
+  - [Cannon Revised](#cannon-revised)
 
 
 # Kinetics
@@ -17,5 +17,6 @@ Here is the general procedure for solving kinetics problems of interest to us:
 5.	Integrate with respect to time to find linear and angular velocity.
 6.	Integrate again with respect to time to find linear and angular displacement.
 
-## Particle Kinetics in 2D
+## Cannon Revised
 
+[Cannon Revised](./Scripts/CannonRevised.cpp)

@@ -15,10 +15,11 @@
 - [Chapter2 Kinematics](./PhysicsForGameDevelopers/C02_Kinematics/Summary.md)
 - [Chapter3 Force](./PhysicsForGameDevelopers/C03_Force/Summary.md)
 - [Chapter4 Kinetics](./PhysicsForGameDevelopers/C04_Kinetics/Summary.md)
+- [Chapter5 Collisions](./PhysicsForGameDevelopers/C05_Collisions/Summary.md)
 
 #### Progress
 
-88 / 553
+111 / 553
 
 ### GAMES201
 
