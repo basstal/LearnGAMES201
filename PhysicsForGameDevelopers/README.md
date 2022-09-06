@@ -1,15 +1,13 @@
 - [Learn Game Physics](#learn-game-physics)
   - [Contents](#contents)
-    - [PhysicsForGameDevelopers](#physicsforgamedevelopers)
-      - [Progress](#progress)
-    - [GAMES201](#games201)
-  - [Notes](#notes)
+  - [PhysicsForGameDevelopers](#physicsforgamedevelopers)
+  - [Progress](#progress)
 
 # Learn Game Physics
 
 ## Contents
 
-### PhysicsForGameDevelopers
+## PhysicsForGameDevelopers
 
 - [Chapter1 Basic Concepts](./PhysicsForGameDevelopers/C01_BasicConcepts/Summary.md)
 - [Chapter2 Kinematics](./PhysicsForGameDevelopers/C02_Kinematics/Summary.md)
@@ -18,14 +16,6 @@
 - [Chapter5 Collisions](./PhysicsForGameDevelopers/C05_Collisions/Summary.md)
 - [Chapter6 Projectiles](./PhysicsForGameDevelopers/C06_Projectiles/Summary.md)
 
-#### Progress
+## Progress
 
 132 / 553
-
-### GAMES201
-
-- [P2](P2/Summary.md)
-
-## Notes
-
-- use [Taichi] version 0.9.1, llvm 10.0.0, commit e2e0e669, win, python 3.8.0
